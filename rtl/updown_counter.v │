@@ -1,0 +1,45 @@
+
+//design file
+module sync_count(
+    input clk,rst_n,L,ud,
+    output reg[2:0] count,
+    output reg full_flag
+    );
+    always@(posedge clk or negedge rst_n)begin
+    if(!rst_n)begin
+        if(L)begin//preset 
+        count<=3'b111;
+        full_flag<=1'b0;
+        end
+        else begin
+        count<=3'b000;
+        full_flag<=1'b0;
+        end
+    end
+    else begin
+        if(ud)begin //up mode
+            if(count==3'b111)begin
+            full_flag<=1'b1;
+            count<=count;//hold the value
+            end
+            else begin
+            count<=count+1'b1;
+            full_flag<=1'b0;
+            end          
+        end
+        else begin //down mode
+            if(count==3'b000)begin
+            full_flag<=1'b1;
+            count<=count;
+            end
+            else begin
+            count<=count-1'b1;
+            full_flag<=1'b0;
+            end
+        
+        end
+    end
+    end
+      
+
+endmodule
